@@ -2,6 +2,8 @@
 
 This document outlines the steps to deploy arktos cluster on GCE from remote workstation machine. User will need to run following steps on workstation machine (the recommended instance size should be atleast ```16 CPU and 32GB RAM``` and the storage size should be ```150GB``` or more)
 
+
+This document outline steps to deploy arktos cluster on GCE from a remote workstation machine. You need to run the following steps on a workstation machine (recommended instance size should be at least **16 CPU and 32GB RAM** and **storage size should be 150GB or more**)
 ### Prerequisites
 
 1. User will need a GCP account, and [gcloud](https://cloud.google.com/sdk/docs/install#deb) configured in your bash profile. Please refer to gcloud configuration documentation or you can use following steps to install and configure gcloud utility.
@@ -54,7 +56,7 @@ sudo make quick-release
    *To use ubuntu image user will need to change following parameters:*
    * `KUBE_GCI_VERSION` : provide image name (For eg. `ubuntu-1804-bionic-v20210928`)
    * `KUBE_GCE_MASTER_PROJECT`: provide project name(for ubuntu image use `ubuntu-os-cloud`)
-   * `KUBE_GCE_NODE_PROJECT`: provide project name(for ubuntu image use `ubuntu-os-cloud`)
+   * `KUBE_GCE_NODE_PROJECT`: s project name(for ubuntu image use `ubuntu-os-cloud`)
 
 
 #### To deploy the arktos cluster on GCE, run kube-up script as follows:

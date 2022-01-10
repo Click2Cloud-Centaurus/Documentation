@@ -4,7 +4,7 @@ This design document is a proposal for enhancing the dashboard UI that
 allows users to manage Centaurus Cluster, Tenants, Users, and
 Quotas in an intuitive way.
 
-## Goals Achieved
+## Goals 
 Following are the added features in Centaurus portal(Dashboard UI):
 * Manage Centaurus Cluster
 * Enable user to login using username and password (instead of token)
@@ -22,7 +22,7 @@ Following are the added features in Centaurus portal(Dashboard UI):
 TBA
 
 ## Background
-Below operations can be modified by the cluster admin using CLI (i.e. using `kubectl` utility) as well as dashboard UI:
+Below operations can be modified by the cluster admin using CLI (i.e. using `kubectl` utility) :
 * CRUD operations can be performed for:
   * Tenant
   * Namespace
@@ -33,9 +33,7 @@ Below operations can be modified by the cluster admin using CLI (i.e. using `kub
   * Service account
 
 Currently, APIs for Resource Partition and Tenant Partition tabs under Cluster Monitoring are unavailable.
-
-### Assumptions and Constraints
-TBA
+None of these are reflected in the current version of Dashboard UI. There should be a simplified, more user-friendly way to manage the cluster, tenants and users.
 
 ## Overview
 ### User Management
@@ -117,15 +115,15 @@ Step 3: Get token for the user that has already been mapped with the username an
 ##### 2. Cluster Monitoring
 * List of all the partitions available
 
-![](img-6.png)
+![](img_1.png)
 
-* It will show details of all nodes and resources
+* Inside Resource Partition details, user will be able see the details of all nodes and resources
 
-![](img-7.png)
+![](img_2.png)
 
-* It will show list and details of all tenants
+* Inside Tenant Partition details, user will be able see the details of all the tenants.
 
-![](img-8.png)
+![](img_3.png)
 
 
 ![](img-9.png)
