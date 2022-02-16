@@ -167,8 +167,8 @@ For a tenant, a user can be created. Tenant user can work on specific namespace 
 
 ### Developement Portal Link
 
-***Link***: [Centaurus Portal](https://35.209.119.154:30001/#/login)
+***Link***: [Centaurus Portal](https://146.148.106.48:9443/#/login)
 
-***Username***: `admin`
+***Username***: `centaurus`
 
-***Password***: `password`
+***Password***: `Centaurus@123`
