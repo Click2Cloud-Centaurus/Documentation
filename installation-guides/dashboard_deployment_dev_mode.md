@@ -29,6 +29,7 @@ nvm install 12
 
 Install node dependencies
 ```bash
+sudo apt-get update
 sudo apt install nodejs -y
 sudo apt install npm -y
 sudo apt install build-essential ruby-full node-typescript -y
@@ -36,7 +37,14 @@ npm install --global typescript
 npm install --global gulp-cli
 npm install --global gulp
 ```
-
+Install Golang(If required)
+```bash
+wget https://storage.googleapis.com/golang/go1.13.1.linux-amd64.tar.gz
+tar -C /usr/local -xzf go1.13.1.linux-amd64.tar.gz
+echo 'export PATH=$PATH:/usr/local/go/bin' >> /etc/profile
+echo 'export GOPATH=$HOME/gopath' >> /etc/profile
+source /etc/profile
+```
 2. Clone the repository.
 
 ```bash

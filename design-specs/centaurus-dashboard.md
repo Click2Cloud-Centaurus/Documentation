@@ -28,7 +28,6 @@ Below operations can be modified by the cluster admin using CLI (i.e. using `kub
   * Cluster Role
   * Quota
   * Users
-  * Service account
 
 Currently, APIs for Resource Partition and Tenant Partition tabs under Cluster Monitoring are unavailable.
 None of these are reflected in the current version of Dashboard UI. There should be a simplified, more user-friendly way to manage the cluster, tenants and users.
@@ -61,7 +60,7 @@ Tenant admin can perform following operation using Dashboard UI:
 ![](img-1.png)
 
 ### Tenant user profile
-Tenaent user can perform following operation using Dashboard UI:
+Tenant user can perform following operation using Dashboard UI:
 * Application deployment
 * Monitoring and resource utilization according to RBAC
 
