@@ -18,8 +18,6 @@ Following are the added features in Centaurus portal(Dashboard UI):
   * Roles
   * Cluster Role
 
-### Non-goals
-TBA
 
 ## Background
 Below operations can be modified by the cluster admin using CLI (i.e. using `kubectl` utility) :
@@ -42,11 +40,11 @@ None of these are reflected in the current version of Dashboard UI. There should
 
 ### Cluster admin profile
 Cluster admin can perform following operation using Dashboard UI:
-* Create Tenant
-* Delete Tenant
-* List Tenant
+* Create tenant
+* Delete tenant
+* List tenant
+* Create tenant admin
 * Monitor health checks & resource utilization for each and every partition
-* Reconfigure Cluster Partitions
 * Create RBAC roles and role bindings for other fine-grained cluster admins
 
 ![img.png](img.png)
@@ -56,7 +54,7 @@ Cluster admin can perform following operation using Dashboard UI:
 Tenant admin can perform following operation using Dashboard UI:
 * Creating other fine-grained tenant admins and regular tenant users
 * Monitor health checks & resource utilization for its own respective tenant within the Centaurus cluster
-* List/create/delete users
+* List/create/delete  tenant users
 * Create RBAC roles and role bindings in the tenant
 * Manage namespace quotas for a tenant
 
@@ -74,39 +72,32 @@ ___
 #### 1. IAM service details
 IAM service is a service that manages users, roles, and permissions.
 This service will be used to manage Centaurus user's username and password.
-###### API Used
-* Create User
-* Get User
-#### 2. Create Tenant Operation
+###### API added
+* Create User(Cluster admin/Tenant admin/Tenant user)
+* List all users
+* Get details of specific user
+* Delete user
+
+#### 2. Tenant Admin Creation
 
 At the time of a tenant creation by *Cluster admin*, a default tenant admin user will be created inside the newly created tenant. Once done, the default tenant admin can do everything inside the tenant without turning to cluster admin for any tenant management functions.
 
-###### API Used
-* Create Tenant
-* Create Roles and Role binding
-
-###### Work Flow
-
 ![](img-4.png)
-#### 3. Create Tenant User Operation
-Step 1: Create a tenant
 
-Step 2: Create a Role, Service account and Role binding
-
-Step 3: Get token for the user that has already been mapped with the username and password.
-
+#### 3. Tenant User Creation
+For a tenant, a user can be created. Tenant user can work on specific namespace within the tenant.
 
 #### 4. Cluster Monitoring
 * Cluster admin can monitor health checks & resource utilization for each and every partition
 * Tenant admin can monitor health checks & resource utilization for its own respective tenant within the Centaurus cluster
 * Tenant user can monitor health checks & resource utilization according to RBAC
 
-###### API to be developed in Dashboard backend
-* Tenant Partition (Create & Get)
-* Resource Partition (Create & Get)
+###### API developed in Dashboard backend
+* To get details of Tenant Partition
+* To get details of Resource Partition
 
 
-### Detailed Design
+### Dashboard detailed Design
 
 ##### 1. Login Page
 
@@ -115,74 +106,63 @@ Step 3: Get token for the user that has already been mapped with the username an
 ##### 2. Cluster Monitoring
 * List of all the partitions available
 
-![](img_1.png)
+![](img_4.png)
 
 * Inside Resource Partition details, user will be able see the details of all nodes and resources
 
-![](img_2.png)
+![](img_5.png)
 
 * Inside Tenant Partition details, user will be able see the details of all the tenants.
 
-![](img_3.png)
+![](img_6.png)
 
 
-![](img-9.png)
+![](img_7.png)
 
 ##### 3. Tenant Monitoring
 * It will show details of all resources within a tenant
 
-![](img-10.png)
+![](img_8.png)
 
 ##### 4. Tenant Operation
 ***List Tenants***
 
-![](img-11.png)
-***Create Tenant***
+![](img_9.png)
+***Create Tenant Admin operation***
 
-![](img-12.png)
-
-***Delete Tenant***
-
-![](img-13.png)
+![](img_10.png)
 
 ##### 5. Managing Namespace
 * List of all Namespaces created
 
-![](img-19.png)
-
-* Create a new namespace
-
-![](img-20.png)
+![](img_11.png)
 
 ##### 6. Access Control
 ***Roles and Cluster roles***
 
-![](img-14.png)
+![](img_12.png)
 
-![](img-15.png)
+
+![](img_13.png)
 
 ##### 7. Managing Quotas
 * List of quotas for a tenant
 
-![](img-16.png)
+![](img_14.png)
 
-* Tenant admin can assign quota to a tenant
+* Tenant admin can manage quota for different namespaces within a tenant and also Tenant admin can update the quota assigned to a tenant
 
-![](img-17.png)
-
-* Tenant admin can update the quota assigned to a tenant
-
-![](img-18.png)
+![](img_15.png)
 
 ##### 7. User Management
 
 * List of all the users created
 
-![](img-21.png)
+![](img_16.png)
 
 * Create a new user
 
-![](img-22.png)
+![](img_17.png)
 
 
 ### Developement Portal Link
