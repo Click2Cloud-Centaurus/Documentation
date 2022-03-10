@@ -63,7 +63,7 @@ Cluster admin can perform following operation using Dashboard UI:
 When user will create a new tenant, dashboard service will create a tenant admin for that tenant with username and password provided by cluster admin user.
 
 Following YAML is being used to create Cluster admin
-```json
+```bigquery
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -99,7 +99,7 @@ Tenant admin is tenant scoped user, who can perform operations on specific tenan
 * Manage CRDs within a tenant
 
 Following YAML is being used to create tenant admin
-```json
+```bigquery
 apiVersion: v1
 kind: Namespace
 metadata:
