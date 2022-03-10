@@ -1,28 +1,25 @@
 
-# Centaurus Portal
+# Centaurus Portal Requirement & Design
+
+**Author(s)**: [Click2Cloud Inc](https://github.com/Click2Cloud-Centaurus)
+
 This design document is a proposal for enhancing the dashboard UI that
 allows users to manage Centaurus Cluster, Tenants, Users, and
 Quotas in an intuitive way.
 
-## Goals 
-Following are the added features in Centaurus portal(Dashboard UI):
+## Goals
 * Manage Centaurus Cluster
 * Manage multiple TPs and RPs using dashboard (by enabling client to fetch details from all TPs and RPs)
 * Enable user to login using username and password (instead of token)
-* Cluster management
-* Tenant management
-* User management
-* Monitoring
-* VM workload feature
-* Managing:
-  * Quota
-  * Namespace
-  * Roles
-  * Cluster Role
-
+* Add tenant management feature
+* Add user management feature
+* Provide cluster monitoring (All TPs and RPs)
+* Workload management (VM, Pods, Deployments, Services, etc)
+* VM workload management
+* Add quota management feature
 
 ## Background
-Below operations can be obtained by the cluster admin and tenant admin using CLI (i.e. using `kubectl` utility) :
+Below details can be obtained by the cluster admin and tenant admin using CLI (i.e. using `kubectl` utility) :
 * Tenant partition detail
 * Resource partition detail
 * Tenant Management
@@ -34,24 +31,39 @@ Below operations can be obtained by the cluster admin and tenant admin using CLI
 * Cluster Monitoring
 * VM workload management
 
-None of these are reflected in the current version of Dashboard UI. There should be a simplified, more user-friendly way to manage the cluster, tenants and users.
+None of these are reflected in the current version of Dashboard UI. User will need a simplified, more user-friendly way to manage the cluster, tenants, users and workloads.
 
 ## Overview
+
 ### User Management
+Centaurus cluster will have a default cluster admin(Username:`centaurus` and password: `Centaurus@123`) which will get created automatically while setting up dashboard service.
+
+#### IAM service details
+IAM service is a service that manages users, roles, and permissions.
+This service will be used to manage Centaurus user's username and password which will get store in postgreSQL database.
+Internally , IAM service will map a token to  username and password for a user.
+
 ![](img-3.png)
 
 ### Cluster admin profile
 Cluster admin can perform following operation using Dashboard UI:
 * Create tenant along with tenant admin
+* Create tenant admin for any tenant
+* Create supported cluster admin user
 * Delete tenant
-* List tenant
-* Create tenant admin
+* List all tenant
+* List any user
+* Delete any user
+* Get details of all tenant partition and resource partition
 * Monitor health checks & resource utilization for each and every partition
-* Create RBAC roles and role bindings for other fine-grained cluster admins
+* Create RBAC roles and role bindings
+* Manage CRDs
+
+#### Tenant Creation
+When user will create a new tenant, dashboard service will create a tenant admin for that tenant with username and password provided by cluster admin user.
 
 Following YAML is being used to create Cluster admin
-
-```cgo
+```json
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -76,12 +88,15 @@ roleRef:
 ![img.png](img.png)
 
 ### Tenant admin profile
-Tenant admin can perform following operation using Dashboard UI:
-* Creating other fine-grained tenant admins and regular tenant users
+Tenant admin is tenant scoped user, who can perform operations on specific tenant. Tenant admin can perform following operation using Dashboard UI:
+* Create,List and Delete supported tenant admin user for that tenant
+* Create and delete tenant user within that tenant
 * Monitor health checks & resource utilization for its own respective tenant within the Centaurus cluster
-* List/create/delete  tenant users
-* Create RBAC roles and role bindings in the tenant
+* Namespace operation for that tenant
+* Role operation for that tenant
 * Manage namespace quotas for a tenant
+* Manage resources within a tenant
+* Manage CRDs within a tenant
 
 Following YAML is being used to create tenant admin
 ```json
@@ -125,14 +140,16 @@ roleRef:
   name: tenant-admin
   apiGroup: rbac.authorization.k8s.io
 ```
+
 ![](img-1.png)
 
 ### Tenant user profile
-Tenant user can perform following operation using Dashboard UI:
-* Application deployment
-* VM workload management
+Tenant user is namespace scoped user that can perform following operation using Dashboard UI:
+* Application deployment within a namespace
+* VM workload management within a namespace
 * Monitoring and resource utilization according to RBAC
-* 
+
+YAML for tenant user
 ```bigquery
 apiVersion: v1
 kind: Namespace
@@ -162,48 +179,27 @@ roleRef:
   kind: Role
   name: tenant-user
   apiGroup: rbac.authorization.k8s.io
-``
+```
 
 ![img-2.png](img-2.png)
 
-## Feature details
-___
-#### 1. IAM service details
-IAM service is a service that manages users, roles, and permissions.
-This service will be used to manage Centaurus user's username and password.
-###### API added
-* Create User(Cluster admin/Tenant admin/Tenant user)
-* List all users
-* Get details of specific user
-* Delete user
+### Dashboard client modification
 
-#### 2. Tenant and tenant-admin Creation
+Earlier dashboard go-client was able to connect to only one api-server of Arktos cluster, the modified dashboard client will be able to communicate to multiple api-server which allow dashboard service to fetch all details of all RPs and TPs.
 
-At the time of a tenant creation by *Cluster admin*, a default tenant admin user will be created inside the newly created tenant. Once done, the default tenant admin can do everything inside the tenant without turning to cluster admin for any tenant management functions.
-
-![](img-4.png)
-
-#### 3. Tenant User Creation
-For a tenant, a user can be created. Tenant user can work on specific namespace within the tenant.
-
-#### 4. Cluster Monitoring
-* Cluster admin can monitor health checks & resource utilization for each and every partition
-* Tenant admin can monitor health checks & resource utilization for its own respective tenant within the Centaurus cluster
-* Tenant user can monitor health checks & resource utilization according to RBAC
-
-###### API developed in Dashboard backend
-* To get details of Tenant Partition
-* To get details of Resource Partition
-
-### Dashboard detailed Design
+## Dashboard detailed Design
 
 ##### 1. Login Page
+User will be able to login to dashboard using username and password.
 
 ![](img-5.png)
 
 ##### 2. Cluster Monitoring
+
 * List of all the partitions available
+* 
 ###### Enable multi-config support in dashboard client:
+
 In centaurus cluster, for 2TP and 2RPs cluster, user will have 4 configs. So dashboard's client can connect to respective API server(respective TP) in which that tenant is located.
 For eg. if we have 2TPs and 2RPs cluster, then all tenants with prefix between `a` to `m` will get created in TP1 and tenants with prefix between `n` to `z` will get created in TP2.
 
@@ -220,8 +216,8 @@ For eg. if we have 2TPs and 2RPs cluster, then all tenants with prefix between `
 
 ![](img_7.png)
 
-##### 3. Tenant Monitoring
-* It will show details of all resources within a tenant
+##### 3. Tenant Monitoring for tenant admin
+* Tenant admin will be able to see the details of all the resources created within that tenant.
 
 ![](img_8.png)
 
@@ -231,22 +227,32 @@ For eg. if we have 2TPs and 2RPs cluster, then all tenants with prefix between `
 ![](img_9.png)
 ***Create Tenant Admin operation***
 
-![](img_10.png)
+![](img_18.png)
 
-##### 5. Managing Namespace
+##### 5. User Management
+
+* List of all the users created
+
+![](img_16.png)
+
+##### 6. Tenant admin overview page
+
+![](img_19.png)
+
+##### 7. Managing Namespace
 * List of all Namespaces created
 
 ![](img_11.png)
 
-##### 6. Access Control
+##### 8. Access Control
 ***Roles and Cluster roles***
 
-![](img_12.png)
+![](img_21.png)
 
 
 ![](img_13.png)
 
-##### 7. Managing Quotas
+##### 9. Managing Quotas
 * List of quotas for a tenant
 
 ![](img_14.png)
@@ -255,20 +261,23 @@ For eg. if we have 2TPs and 2RPs cluster, then all tenants with prefix between `
 
 ![](img_15.png)
 
-##### 7. User Management
+##### 9. Tenant User 
 
-* List of all the users created
+* Create a new tenant user
 
-![](img_16.png)
+![](img_20.png)
 
-* Create a new user
+* Tenant user overview page
 
-![](img_17.png)
+![](img_22.png)
 
+* VM workload management
+
+![](img_23.png)
 
 ### Developement Portal Link
 
-***Link***: [Centaurus Portal](https://146.148.106.48:9443/#/login)
+***Link***: [Centaurus Portal](https://35.193.138.94:30001/#/login)
 
 ***Username***: `centaurus`
 
