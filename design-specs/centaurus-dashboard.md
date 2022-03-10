@@ -197,7 +197,9 @@ User will be able to login to dashboard using username and password.
 ##### 2. Cluster Monitoring
 
 * List of all the partitions available
-* 
+
+![](img_24.png)
+
 ###### Enable multi-config support in dashboard client:
 
 In centaurus cluster, for 2TP and 2RPs cluster, user will have 4 configs. So dashboard's client can connect to respective API server(respective TP) in which that tenant is located.
