@@ -57,6 +57,8 @@ Getting Private key
 ```shell
 kubectl create namespace centaurus-dashboard 
 kubectl create secret generic centaurus-dashboard-certs --from-file=$HOME/dashboard.key --from-file=$HOME/dashboard.crt -n centaurus-dashboard
+sudo mkdir /opt/centaurus-configs
+cp .kube/config /opt/centaurus-configs/kubeconfig-proxy
 kubectl create -f centaurus-dashboard.yaml
 ```
 
